@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Header from './Header.jsx';
 import Board from './Board.jsx';
 import Reset from "./Reset.jsx"
@@ -16,6 +16,20 @@ export default function App() {
     ["-", "-", "-"]
   ]);
   const [moves, setMoves]= useState(0);
+  const[loading,setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData(){
+      const res = await fetch("https://api.npoint.io/c734e05e43c5b87dd971")
+      const data = await res.json();
+      console.log(data);
+      setTurn(data.turn);
+      setValues(data.values);
+      setMoves(data.moves);
+    }
+    fetchData();
+    setLoading(false);
+  }, [])
 
   function appClick(rowNumber, colNumber){
     console.log("Click en " + rowNumber + colNumber);
@@ -42,11 +56,13 @@ export default function App() {
     <div className="App" >
 
         <h2>TicTacToe</h2>
-        <Header turn={turn}/>
-        <Board values={values} appClick={appClick}/>
-        <h3> Número de movimientos: {moves} </h3>
-        <Reset clickReset = {clickReset}/>
-
+        {loading ? <h1>"LOADING..."</h1> : 
+        <div>
+          <Header turn={turn}/>
+          <Board values={values} appClick={appClick}/>
+          <h3> Número de movimientos: {moves} </h3>
+          <Reset clickReset = {clickReset}/>
+        </div>}
     </div>
   );
 }
