@@ -8,7 +8,7 @@ export default function Board(props){
             props.values.map((valoresRow, rowIndex) => {
 
               let row = valoresRow.map((value, colIndex) => {
-                return <Casilla key={rowIndex + "-" + colIndex} value={value}/>
+                return <Casilla rowIndex={rowIndex} colIndex={colIndex} key={rowIndex + "-" + colIndex} value={value} boardClick={props.appClick}/>
               });
 
               return(<div key={"row" + rowIndex}>{row}</div>);
